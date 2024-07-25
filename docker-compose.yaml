@@ -1,0 +1,48 @@
+name: docker-compose-learning
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      - my-network
+    volumes:
+      - dbvolume:/var/lib/mysql
+
+  backend:
+    build: ./DevopsClass
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - frontend
+    networks:
+      - my-network
+
+  frontend:
+    build: ./DevopsClassFront
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - my-network
+    volumes:
+      - ./DevopsClassFront/dist:/usr/local/apache2/htdocs/
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  dbvolume:

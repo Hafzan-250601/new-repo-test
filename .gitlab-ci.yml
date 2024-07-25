@@ -1,0 +1,35 @@
+image: docker:cli
+
+stages:
+  - build
+  - test
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+services:
+    - docker:dind
+
+build:
+  stage: build
+  script:
+    - docker compose up -d
+  artifacts:
+    paths:
+      - ./docker-compose.yaml
+
+test:
+  stage: test
+  script:
+    - apk update
+    - apk add --no-cache python3 py3-pip
+    - python3 -m venv /venv
+    - source /venv/bin/activate
+    - pip install pytest selenium
+    - docker compose up -d
+    - sleep 20
+    - python test_devopstest.py
+  artifacts:
+    paths:
+      - ./docker-compose.yaml
