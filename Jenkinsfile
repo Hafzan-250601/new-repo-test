@@ -12,7 +12,6 @@ pipeline {
         sh 'aws securityhub enable-import-findings-for-product --product-arn arn:aws:securityhub:ap-southeast-1::product/aquasecurity/aquasecurity'
         sh 'cat report.asff | jq '.Findings''
         sh 'aws securityhub batch-import-findings --findings report.asff'
-'
       }
     }
   }
