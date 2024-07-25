@@ -14,7 +14,7 @@ pipeline {
     }
     stage('Upload Findings to SecurityHub') {
       steps {
-        sh 'cat report.asff | jq '.Findings''
+        sh 'cat report.asff | jq \'.Findings\''
         sh 'aws securityhub batch-import-findings --findings report.asff'
       }
     }
