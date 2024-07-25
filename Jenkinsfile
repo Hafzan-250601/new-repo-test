@@ -8,7 +8,7 @@ pipeline {
     }
     stage('Scan') {
       steps {
-        sh 'trivy image --format template --template "@contrib/asff.tpl" -o report.asff --exit-code 0 --severity HIGH,CRITICAL,MEDIUM devopsapps'
+        sh 'trivy image --format template --template "@contrib/asff.tpl" -o report.asff --exit-code 0 --severity HIGH,CRITICAL,MEDIUM --no-progress devopsapps'
         sh 'aws securityhub enable-import-findings-for-product --product-arn arn:aws:securityhub:ap-southeast-1::product/aquasecurity/aquasecurity'
       }
     }
