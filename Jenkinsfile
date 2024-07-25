@@ -8,7 +8,7 @@ pipeline {
     }
     stage('Scan') {
       steps {
-        sh 'trivy images-f json -o results.json --exit-code 0 --no-progress --severity HIGH,CRITICAL,MEDIUM devopsapps'
+        sh 'trivy images -f json -o results.json --exit-code 0 --no-progress --severity HIGH,CRITICAL,MEDIUM devopsapps'
       }
     }
   }
